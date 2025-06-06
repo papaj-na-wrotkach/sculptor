@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-ls -lA
-
 export OUTPUT_DIR
 mkdir -p "$OUTPUT_DIR"
 
