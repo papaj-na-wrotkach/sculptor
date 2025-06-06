@@ -18,7 +18,7 @@ runs:
         wget "https://ziglang.org/download/${ZIG_VERSION}/zig-${ZIG_ARCH}-linux-${ZIG_VERSION}.tar.xz" \
           -O /tmp/zig.tar.xz
 
-        tar -xJf /tmp/zig.tar.xz -C / \
+        sudo tar -xJf /tmp/zig.tar.xz -C / \
           --transform='s|^[^/]+/zig$|usr/local/bin/zig|x' \
           --transform='s|^[^/]+/lib|usr/local/lib/zig|x' \
           --transform='s|^[^/]+/doc|usr/local/share/doc/zig|x' \
@@ -26,6 +26,3 @@ runs:
           --transform='s|^[^/]+/README.md$|usr/local/share/doc/zig/README.md|x' \
           --wildcards \
           "*/"{zig,lib,doc,LICENSE,README.md}
-
-    - name: Install cargo-zigbuild
-      run: cargo install --locked cargo-zigbuild

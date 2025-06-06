@@ -24,6 +24,7 @@ runs:
 
     - name: Check with cargo-fmt
       if:  inputs.lint == true
+      shell: sh
       run: cargo fmt -v --all -- --check
 
     - name: Run Clippy
