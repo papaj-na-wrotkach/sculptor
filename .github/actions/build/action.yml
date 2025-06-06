@@ -19,7 +19,7 @@ runs:
     - name: Convert input targets to Bash array
       shell: bash
       run: |
-        readarray -d $'\0' -t targets < <(printenv CARGO_BUILD_TARGETS | awk -F, '{ for (i = 1; i <= NF; i++) printf "--target\0%s\0", $i }')
+        readarray -d $'\0' -t targets < <(awk -F, '{ for (i = 1; i <= NF; i++) printf "--target\0%s\0", $i }' <<< "${{ inputs.targets }}")
         declare -p targets > /tmp/targets.sh
 
     - name: Check with cargo-fmt

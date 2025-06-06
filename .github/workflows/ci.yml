@@ -1,5 +1,3 @@
-name: Continuous Integration
-
 on:
   push:
     branches: [ "master" ]
@@ -24,7 +22,7 @@ env:
 
 jobs:
   build:
-    name: Build, Lint & Test
+    name: Build, lint and test
     runs-on: ubuntu-latest
     env:
       OUTPUT_DIR: target/output
