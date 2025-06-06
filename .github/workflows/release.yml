@@ -17,11 +17,11 @@ env:
 jobs:
   build-binary:
     name: Build binaries and upload them as artifacts
+    runs-on: ubuntu-latest
     env:
       OUTPUT_DIR: target/output
-    runs-on: ubuntu-latest
-
     steps:
+
       - name: Checkout the code
         uses: actions/checkout@v4
 
@@ -29,6 +29,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           prefix-key: "cargo"
+          cache-all-crates: true
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@master
@@ -61,6 +62,8 @@ jobs:
     name: Create GitHub release
     needs: [ build-binary ]
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
 
       # we need to checkout for automatic tag detection
