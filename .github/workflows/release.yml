@@ -57,31 +57,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ${{ env.OUTPUT_DIR }}/*
-        
-  create-release:
-    name: Create GitHub release
-    needs: [ build-binary ]
-    runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-
-      # we need to checkout for automatic tag detection
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
-      - name: Download the artifacts
-        uses: actions/download-artifact@v4
-
-      - name: Create release
-        run: |
-          gh release create ${{ github.ref_name }} \
-            --verify-tag ${{ github.ref_name }} \
-            --generate-notes \
-            --notes-from-tag \
-            --latest \
-            --draft \
-            artifact/*
 
   build-image:
     name: Build image and push to GHCR
@@ -130,3 +105,30 @@ jobs:
           sbom: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
+        
+  create-release:
+    name: Create GitHub release
+    needs:
+      - build-binary
+      - build-image
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+
+      # we need to checkout for automatic tag detection
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Download the artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create release
+        run: |
+          gh release create ${{ github.ref_name }} \
+            --verify-tag ${{ github.ref_name }} \
+            --generate-notes \
+            --notes-from-tag \
+            --latest \
+            --draft \
+            artifact/*
