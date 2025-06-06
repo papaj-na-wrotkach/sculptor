@@ -33,8 +33,7 @@ jobs:
       - name: Use build cache
         uses: Swatinem/rust-cache@v2
         with:
-          prefix-key: "v0"
-          shared-key: "cargo"
+          prefix-key: "cargo-v0"
           cache-all-crates: true
 
       - name: Set up Rust toolchain
@@ -111,8 +110,8 @@ jobs:
           #   ${{ github.repository_owner }}/sculptor:${{ github.ref_name }}
           provenance: false
           sbom: false
-          cache-from: type=gha,scope=repository
-          cache-to: type=gha,scope=repository,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
         
   create-release:
     name: Create GitHub release
@@ -126,9 +125,6 @@ jobs:
 
       - name: Checkout the code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-          fetch-tags: true
 
       - name: Download the artifacts
         uses: actions/download-artifact@v4
@@ -137,6 +133,7 @@ jobs:
 
       - name: Create release
         run: |
+          git fetch --tags origin
           gh release create ${{ github.ref_name }} \
             --verify-tag ${{ github.ref_name }} \
             --generate-notes \
