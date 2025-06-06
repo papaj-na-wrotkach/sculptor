@@ -1,3 +1,6 @@
+name: Release
+run-name: Release ${{ github.ref_name }}
+
 on:
   push:
     tags:
@@ -20,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OUTPUT_DIR: target/output
+    outputs:
+      binary-artifact-id: ${{ steps.artifact-upload.outputs.artifact-id }}
     steps:
 
       - name: Checkout the code
@@ -54,6 +59,7 @@ jobs:
         run: ./.github/scripts/package-artifacts.sh
 
       - name: Upload artifact
+        id: artifact-upload
         uses: actions/upload-artifact@v4
         with:
           path: ${{ env.OUTPUT_DIR }}/*
@@ -122,6 +128,8 @@ jobs:
 
       - name: Download the artifacts
         uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.build-binary.outputs.binary-artifact-id }}
 
       - name: Create release
         run: |
