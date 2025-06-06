@@ -4,7 +4,7 @@ ARG RUST_VERSION="1"
 # defaults to rust:1-alpine
 FROM --platform=$BUILDPLATFORM rust:${RUST_VERSION}-alpine${ALPINE_VERSION} AS chef
 USER root
-RUN apk add --no-cache cargo-zigbuild
+RUN apk add --no-cache musl-dev cargo-zigbuild
 RUN cargo install --locked cargo-chef
 WORKDIR /build
 
