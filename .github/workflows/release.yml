@@ -119,8 +119,6 @@ jobs:
       - build-binary
       - build-image
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
 
       - name: Checkout the code
@@ -131,7 +129,19 @@ jobs:
         with:
           artifact-ids: ${{ needs.build-binary.outputs.binary-artifact-id }}
 
+      - name: Debug tag information
+        shell: bash
+        run: |
+          echo "Workflow triggered by GITHUB_REF_NAME: ${{ github.ref_name }}"
+          echo "--- Listing all local tags ---"
+          git tag -l
+          echo "--- Showing details for tag '${{ github.ref_name }}' ---"
+          git show ${{ github.ref_name }} || echo "Error: Tag '${{ github.ref_name }}' not found or 'git show' failed."
+          echo "--------------------------------"
+
       - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release create ${{ github.ref_name }} \
             --verify-tag ${{ github.ref_name }} \
