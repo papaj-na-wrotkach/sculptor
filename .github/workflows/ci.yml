@@ -11,6 +11,8 @@ on:
       - src
       - Cargo*
       - Dockerfile
+  # for testing purposes
+  workflow_dispatch:
 
 permissions:
   contents: read
