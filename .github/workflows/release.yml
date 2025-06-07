@@ -139,4 +139,4 @@ jobs:
             --notes-from-tag \
             --latest \
             --draft \
-            artifact/*
+            binaries-${{ github.ref_name }}/*
